@@ -1,65 +1,46 @@
 package com.example.ec.dto;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+import java.util.Map;
 import java.util.Objects;
 
-@Entity
+@Document
 public class Tour {
     @Id
-    @GeneratedValue
-    private Integer id;
+    private String id;
 
-    @Column
+    @Indexed
     private String title;
 
-    @Column(length = 2000)
-    private String description;
+    @Indexed
+    private String tourPackageCode;
 
-    @Column(length = 2000)
-    private String blurb;
+    private String tourPackageName;
 
-    @Column
-    private Integer price;
+    private Map<String, String> details;
 
-    @Column
-    private String duration;
-
-    @Column(length = 2000)
-    private String bullets;
-
-    @Column
-    private String keywords;
-
-
-    @ManyToOne
-    private TourPackage tourPackage;
-
-    @Column
-    @Enumerated
-    private Difficulty difficulty;
-
-    @Column
-    @Enumerated
-    private Region region;
-
-    public Tour() {
-    }
-
-    public Tour(String title, String description, String blurb, Integer price, String duration,
-                String bullets, String keywords, TourPackage tourPackage, Difficulty difficulty, Region region) {
+    /**
+     * Construct a fully initialized Tour.
+     *
+     * @param title title of the tour
+     * @param tourPackage tour package
+     * @param details details about the tour (key-value pairs)
+     */
+    public Tour(String title, TourPackage tourPackage, Map<String, String> details) {
         this.title = title;
-        this.description = description;
-        this.blurb = blurb;
-        this.price = price;
-        this.duration = duration;
-        this.bullets = bullets;
-        this.keywords = keywords;
-        this.tourPackage = tourPackage;
-        this.difficulty = difficulty;
-        this.region = region;
+        this.tourPackageCode = tourPackage.getCode();
+        this.tourPackageName = tourPackage.getName();
+        this.details = details;
     }
 
-    public Integer getId() {
+    protected Tour() {
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -67,84 +48,24 @@ public class Tour {
         return title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTourPackageCode() {
+        return tourPackageCode;
     }
 
-    public String getBlurb() {
-        return blurb;
+    public String getTourPackageName() {
+        return tourPackageName;
     }
 
-    public Integer getPrice() {
-        return price;
+    public Map<String, String> getDetails() {
+        return details;
     }
 
-    public String getDuration() {
-        return duration;
-    }
-
-    public String getBullets() {
-        return bullets;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public TourPackage getTourPackage() {
-        return tourPackage;
-    }
-
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setBlurb(String blurb) {
-        this.blurb = blurb;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public void setBullets(String bullets) {
-        this.bullets = bullets;
-    }
-
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-
-    public void setTourPackage(TourPackage tourPackage) {
-        this.tourPackage = tourPackage;
-    }
-
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
+    @Override
+    public String toString() {
+        return "Tour{" +
+                "id='" + id + '\'' +
+                ", details=" + details +
+                '}';
     }
 
     @Override
@@ -152,32 +73,13 @@ public class Tour {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tour tour = (Tour) o;
-        return Objects.equals(id, tour.id) && Objects.equals(title, tour.title) &&
-                Objects.equals(description, tour.description) && Objects.equals(blurb, tour.blurb) &&
-                Objects.equals(price, tour.price) && Objects.equals(duration, tour.duration) &&
-                Objects.equals(bullets, tour.bullets) && Objects.equals(keywords, tour.keywords) &&
-                Objects.equals(tourPackage, tour.tourPackage) && difficulty == tour.difficulty && region == tour.region;
+        return Objects.equals(id, tour.id) &&
+                Objects.equals(details, tour.details);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, blurb, price, duration, bullets, keywords, tourPackage, difficulty, region);
+        return Objects.hash(id, details);
     }
 
-    @Override
-    public String toString() {
-        return "Tour{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", blurb='" + blurb + '\'' +
-                ", price=" + price +
-                ", duration='" + duration + '\'' +
-                ", bullets='" + bullets + '\'' +
-                ", keywords='" + keywords + '\'' +
-                ", tourPackage=" + tourPackage +
-                ", difficulty=" + difficulty +
-                ", region=" + region +
-                '}';
-    }
 }

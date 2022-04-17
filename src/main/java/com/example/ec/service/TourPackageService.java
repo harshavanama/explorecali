@@ -14,6 +14,7 @@ public class TourPackageService {
         this.tourPackageRepository = tourPackageRepository;
     }
 
+
     /**
      * Create a Tour Package
      *
@@ -24,21 +25,19 @@ public class TourPackageService {
      */
     public TourPackage createTourPackage(String code, String name) {
         return tourPackageRepository.findById(code)
-                .orElse(tourPackageRepository.save(new TourPackage(code,name)));
+                .orElse(tourPackageRepository.save(new TourPackage(code, name)));
     }
 
     /**
      * Lookup All Tour packages
      *
-     * @return all tour packages
+     * @return
      */
     public Iterable<TourPackage> lookup(){
-
         return tourPackageRepository.findAll();
     }
 
     public long total() {
-
         return tourPackageRepository.count();
     }
 }
